@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:WindowedApplication xmlns:fx="http://ns.adobe.com/mxml/2009"
+                       xmlns:s="library://ns.adobe.com/flex/spark"
+                       xmlns:mx="library://ns.adobe.com/flex/mx"
+                       
+                       applicationComplete="handleComplete()">
+	<fx:Script>
+		<![CDATA[
+			import de.ketzler.utils.SimpleUntar;
+
+			import flash.filesystem.File;
+
+			private var simpleTar : SimpleUntar;
+			private function handleComplete() : void {
+				
+				
+				//trace('bla');
+				var savedTime:int = getTimer();
+				
+				savedTime = getTimer();
+				trace('start: '+(savedTime/1000));
+				simpleTar = new SimpleUntar();
+				simpleTar.sourcePath = File.applicationDirectory.resolvePath("test.tar").nativePath;
+				simpleTar.targetPath = File.applicationDirectory.resolvePath("unpacked").nativePath;
+				
+				simpleTar.extract();
+				
+				simpleTar.close();
+				trace('end: '+(getTimer()-savedTime)/1000);
+				
+				
+				
+				
+				simpleTar = new SimpleUntar();
+				simpleTar.sourcePath = File.applicationDirectory.resolvePath("test.tar").nativePath;
+				
+				var ba:ByteArray = simpleTar.getFileContent('metainfo.xml');
+				
+				var xml:XML = new XML(ba);
+				trace(xml.toXMLString());
+				test.text = xml.config.(@name == 'title').@value.toString();
+				
+				return;
+				
+				
+				
+								
+				
+				
+			}
+
+		]]>
+	</fx:Script>
+	
+	<!-- Launch your application by right clicking within this class and select Debug As > FDT SWF Application -->
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<s:Label id="test" text="-"/>
+	
+	
+</s:WindowedApplication>
